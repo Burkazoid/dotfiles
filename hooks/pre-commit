@@ -1,0 +1,50 @@
+#!/bin/bash
+
+echo "$(tput setaf 3)Doing pre-commit checks (You can skip this with '$(tput setaf 2)$(tput bold)git commit --no-verify$(tput sgr 0)$(tput setaf 3)')" 
+
+# Abort commit if there are changes to the database.yml
+
+echo "$(tput setaf 3) - Checking for changes to config/database.yml$(tput sgr 0)"
+
+if git diff --name-status --cached | grep -q 'config/database.yml'
+then
+        echo "$(tput setaf 1)  - Aborting commit due to changes in the database.yml."
+        exit 1
+else
+        echo "$(tput setaf 2)  - No changes to the database.yml found.$(tput sgr 0)"
+fi
+
+
+
+
+# Search for bad phrases and abort if any found
+
+bad_phrases=('console.log(' 'binding.pry' 'byebug' ':focus=>' ':focus =>' 'focus:true' 'focus: true' 'alert(' '<<<<<<< HEAD' '>>>>>>> master')
+bad_phrase_found=false
+
+if git-rev-parse --verify HEAD >/dev/null 2>&1; then
+    against=HEAD
+else
+    against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+fi
+
+echo "$(tput setaf 3) - Searching files for bad phrases...$(tput sgr 0)"
+
+for FILE in `git diff-index --diff-filter=ACMRTUXB --name-status $against -- | cut -c3-` ; do
+    for bad_phrase in "${bad_phrases[@]}" ; do
+      if grep -q "$bad_phrase" $FILE ; then
+          bad_phrase_found=true
+          echo "  - '$(tput bold)$(tput setaf 1)$bad_phrase$(tput sgr0)' was found in $(tput bold)$(tput setaf 5)$FILE$(tput sgr0)"
+      fi
+    done
+done
+
+if $bad_phrase_found ; then
+  echo ""
+  echo "$(tput setaf 1)** If you are fine with this then add the flag $(tput bold)--no-verify$(tput sgr0)$(tput setaf 1) to your commit **$(tput setaf 0)"
+  exit 1
+else
+  echo "$(tput setaf 2)  - No bad phrases found.$(tput sgr 0)"
+fi
+
+exit 0

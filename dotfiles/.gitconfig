@@ -1,0 +1,20 @@
+[user]
+	name = James Burke
+	email = <insert email>
+[color]
+	ui = auto
+[core]
+	mergeoptions = --no-edit
+        autocrlf = input
+[alias]
+        po = push origin
+	s = status
+	ci = commit
+	checkmerge = "!git show --summary `git merge-base $1 master`"
+        ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+	lq = "!git --no-pager log --pretty=format:\"%C(yellow)%h%Cred%d %Creset%s%Cblue [%cn]\" --decorate -n 30"
+        f = "!git ls-files | grep -i"
+[push]
+	default = simple
