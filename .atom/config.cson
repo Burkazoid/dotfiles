@@ -1,0 +1,21 @@
+"*":
+  core:
+    allowPendingPaneItems: false
+    excludeVcsIgnoredPaths: false
+    telemetryConsent: "no"
+    themes: [
+      "atom-material-ui"
+      "atom-material-syntax"
+    ]
+  "custom-title":
+    template: "<%= filePath %><% if (projectPath) { %> - <%= projectPath %><% } %>"
+  editor:
+    fontSize: 13
+    scrollSensitivity: 60
+    showInvisibles: true
+  "exception-reporting":
+    userId: "33ce1442-fe4d-40f6-ac8d-6e81eb56a7b8"
+  welcome:
+    showOnStartup: false
+  whitespace:
+    ignoreWhitespaceOnCurrentLine: false
